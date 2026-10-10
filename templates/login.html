@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% set title = "SecureWall " + login_type + " Login" %}
+{% block content %}
+<section class="login-panel clean-login">
+    <div class="login-badge">{{ login_type }} Login</div>
+    <h1>{{ "Administrator Console" if login_type == "Admin" else "IP Verification Portal" }}</h1>
+
+    <form class="login-form" method="POST" action="{{ post_url }}">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Enter username" required>
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <a class="text-link" href="{{ url_for('landing') }}">← Back</a>
+</section>
+{% endblock %}

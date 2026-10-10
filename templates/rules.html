@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% set title = "SecureWall Rule Management" %}
+
+{% block content %}
+<section class="panel">
+    <h1>Rule Management</h1>
+
+    <form class="form-row" method="POST" action="{{ url_for('rules') }}">
+        <input type="text" name="ip" placeholder="Enter IP Address" required>
+        <select name="action">
+            <option value="ALLOW">ALLOW</option>
+            <option value="BLOCK">BLOCK</option>
+        </select>
+        <button type="submit">Save Rule</button>
+    </form>
+
+    <div class="table-card">
+        <h2>Current Rules</h2>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>IP Address</th>
+                <th>Action</th>
+                <th>Remove</th>
+            </tr>
+
+            {% for rule in rules %}
+            <tr>
+                <td>{{ rule[0] }}</td>
+                <td>{{ rule[1] }}</td>
+                <td>
+                    <span class="badge {{ 'badge-block' if rule[2] == 'BLOCK' else 'badge-allow' }}">
+                        {{ rule[2] }}
+                    </span>
+                </td>
+                <td>
+                    <a class="delete-link" href="{{ url_for('delete_rule', rule_id=rule[0]) }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% if not rules %}
+            <p class="empty">No firewall rules added yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

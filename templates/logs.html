@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% set title = "Audit Logs" %}
+{% block content %}
+<section class="panel wide-panel">
+    <div class="dashboard-header">
+        <div>
+            <div class="hero-badge">Administrator Console</div>
+            <h1>Audit Logs</h1>
+        </div>
+        <div class="action-links">
+            <a class="secondary-button" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+            <a class="danger-button" href="{{ url_for('clear_logs') }}">Clear Logs</a>
+        </div>
+    </div>
+    <div class="table-card">
+        <table>
+            <tr><th>ID</th><th>IP Address</th><th>Result</th><th>Time</th></tr>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log[0] }}</td>
+                <td class="ip-cell">{{ log[1] }}</td>
+                <td><span class="badge {{ 'badge-block' if log[2] == 'BLOCK' else 'badge-allow' }}">{{ log[2] }}</span></td>
+                <td>{{ log[3] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% if not logs %}<p class="empty">No logs available.</p>{% endif %}
+    </div>
+</section>
+{% endblock %}

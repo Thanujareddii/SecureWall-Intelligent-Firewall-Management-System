@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% set title = "SecureWall IP Verification" %}
+{% block content %}
+<section class="panel scan-panel">
+    <div class="dashboard-header">
+        <div>
+            <div class="hero-badge">User Portal</div>
+            <h1>IP Verification Portal</h1>
+        </div>
+        <a class="danger-button" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <div class="form-card lookup-card">
+        <h2>Check IP</h2>
+        <form class="form-row" method="POST" action="{{ url_for('user_dashboard') }}">
+            <input type="text" name="ip" placeholder="Enter IP address" required>
+            <button type="submit">Verify</button>
+        </form>
+    </div>
+
+    {% if result %}
+        <div class="result-box {{ 'blocked-result' if result == 'BLOCK' else 'safe-result' }}">
+            <span>Result</span>
+            <h2>{{ result }}</h2>
+            <p><strong>{{ scanned_ip }}</strong></p>
+        </div>
+    {% else %}
+        <div class="info-box">Enter an IP address and click Verify.</div>
+    {% endif %}
+</section>
+{% endblock %}

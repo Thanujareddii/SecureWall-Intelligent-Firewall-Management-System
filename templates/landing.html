@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% set title = "SecureWall" %}
+{% block content %}
+<section class="hero-panel clean-landing">
+    <div class="hero-badge">Enterprise Firewall Management</div>
+    <h1>SecureWall</h1>
+    <h2 class="main-tagline">Protect • Monitor • Control</h2>
+
+    <div class="login-choice-grid">
+        <a class="choice-card admin-card" href="{{ url_for('admin_login') }}">
+            <span class="card-icon-large">🛡️</span>
+            <h2>Administrator Console</h2>
+            <span class="card-button">Administrator Login →</span>
+        </a>
+        <a class="choice-card user-card" href="{{ url_for('user_login') }}">
+            <span class="card-icon-large">🌐</span>
+            <h2>IP Verification Portal</h2>
+            <span class="card-button">User Login →</span>
+        </a>
+    </div>
+</section>
+{% endblock %}

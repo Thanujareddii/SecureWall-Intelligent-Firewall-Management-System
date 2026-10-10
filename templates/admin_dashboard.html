@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% set title = "SecureWall Admin Console" %}
+
+{% block content %}
+<section class="panel wide-panel">
+    <div class="dashboard-header">
+        <div>
+            <div class="hero-badge">Administrator Console</div>
+            <h1>Firewall Management Console</h1>
+        </div>
+        <a class="danger-button" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <div class="quick-stats">
+        <div class="stat-card"><span>{{ rules|length }}</span><p>Total Rules</p></div>
+        <div class="stat-card"><span>{{ logs|length }}</span><p>Audit Logs</p></div>
+        <div class="stat-card"><span>Admin</span><p>Access</p></div>
+    </div>
+
+    <div class="form-card">
+        <h2>Add Rule</h2>
+        <form class="form-row" method="POST" action="{{ url_for('add_rule') }}">
+            <input type="text" name="ip" placeholder="Enter IP address" required>
+            <select name="action">
+                <option value="ALLOW">ALLOW</option>
+                <option value="BLOCK">BLOCK</option>
+            </select>
+            <button type="submit">Add</button>
+        </form>
+    </div>
+
+    <div class="table-card">
+        <div class="table-title-row">
+            <h2>Firewall Rules</h2>
+        </div>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>IP Address</th>
+                <th>Action</th>
+                <th>Status</th>
+                <th>Controls</th>
+            </tr>
+            {% for rule in rules %}
+            <tr>
+                <td>{{ rule[0] }}</td>
+                <td class="ip-cell">{{ rule[1] }}</td>
+                <td><span class="badge {{ 'badge-block' if rule[2] == 'BLOCK' else 'badge-allow' }}">{{ rule[2] }}</span></td>
+                <td><span class="badge {{ 'badge-allow' if rule[3] == 1 else 'badge-disabled' }}">{{ 'ENABLED' if rule[3] == 1 else 'DISABLED' }}</span></td>
+                <td class="action-links">
+                    <a href="{{ url_for('edit_rule', rule_id=rule[0]) }}">Edit</a>
+                    <a href="{{ url_for('toggle_rule', rule_id=rule[0]) }}">{{ 'Disable' if rule[3] == 1 else 'Enable' }}</a>
+                    <a class="delete-link" href="{{ url_for('delete_rule', rule_id=rule[0]) }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% if not rules %}<p class="empty">No firewall rules available.</p>{% endif %}
+    </div>
+
+    <div class="table-card">
+        <div class="table-title-row">
+            <h2>Audit Logs</h2>
+            <a class="secondary-button" href="{{ url_for('logs') }}">View Logs</a>
+        </div>
+        <table>
+            <tr><th>ID</th><th>IP Address</th><th>Result</th><th>Time</th></tr>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log[0] }}</td>
+                <td class="ip-cell">{{ log[1] }}</td>
+                <td><span class="badge {{ 'badge-block' if log[2] == 'BLOCK' else 'badge-allow' }}">{{ log[2] }}</span></td>
+                <td>{{ log[3] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% if not logs %}<p class="empty">No scan logs found.</p>{% endif %}
+    </div>
+</section>
+{% endblock %}
